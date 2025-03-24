@@ -1,0 +1,2 @@
+Transaction ID,Extracted Entity,Entity Type,Risk Score,Supporting Evidence,Confidence Score,Reason
+TXN001,"['Acme Corporation','SovCo Capital Partners']","['Corporation','Corporation']",0.65,"['OpenCorporates','Company Website']",0.95,"SovCo Capital Partners is not on sanctions list but an entity of interest. It is owned by Russian businessmen and related to Socombank PJSC, a sanctioned entity"

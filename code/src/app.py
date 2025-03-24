@@ -1,7 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
-import ast 
-import csv
+import csv 
+import json
+from io import StringIO,BytesIO  
+from flask import send_file
+from modules.read_input_file import extract_input_file_details
+from modules.reputation_risk import fraud_detection, get_entity_details
+from modules.extract_entity import entity_extraction
+
+
 
 app = Flask(__name__)
 
@@ -21,6 +28,12 @@ def allowed_file(filename):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
+        # entity_extraction("Google")
+        # #name, type, Saction, SReason, rep_risk_score, RReason
+        # reputation_entities = get_entity_details("Google")
+        # fraud_detection(reputation_entities,"Google")
+        #name, rep_risk_score, RReason 
+
         if 'file' not in request.files:
             return 'No file part', 400
 
@@ -34,6 +47,21 @@ def index():
             # Save the uploaded file in the uploads folder
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
+            
+            payerName, receiverName, transactionNotes = extract_input_file_details(file_path)
+            for payerName, receiverName, transactionNotes in zip(payerName, receiverName, transactionNotes):
+                print(f"PayerName: {payerName}, ReceiverName: {receiverName}, Transaction Notes: {transactionNotes}")
+                #extract entities
+                entity_extraction(payerName)
+                entity_extraction(receiverName)
+
+                #reptutation risk
+                reputation_entities = get_entity_details(payerName)
+                fraud_detection(reputation_entities,payerName)
+
+                reputation_entities = get_entity_details(receiverName)
+                fraud_detection(reputation_entities,receiverName)
+
             # Redirect to the /result page with the filename
             return redirect(url_for('result', filename=filename))
 
@@ -41,48 +69,69 @@ def index():
 
     return render_template('index.html')
 
+file_name = 'output.json'
+
+# Get the current working directory
+current_directory = os.getcwd()
+
+# Join the current directory with the folder and filename
+OUTPUT_FILE_PATH = os.path.join(current_directory, file_name) # Replace with the actual path to your JSON file
+print(OUTPUT_FILE_PATH)
 @app.route('/result')
 def result():
-    filename = "G://sound//hackathon//output.csv"  # Hardcoded path to the output file
+    # Read the data from output.json file
+    try:
+        with open(OUTPUT_FILE_PATH, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        return 'File not found.', 404
+    except json.JSONDecodeError:
+        return 'Error decoding JSON file.', 500
 
-    if filename:
-        filepath = filename  # Use the hardcoded file path
-        data = []
+    # Pass the data to the result template
+    return render_template('result.html', data=data)
 
-        # Read and process the CSV file
-        try:
-            with open(filepath, newline='', encoding='utf-8') as file:
-                reader = csv.DictReader(file)
-                for row in reader:
-                    print(f"Row before parsing: {row}")  # Debugging line to inspect the row
+@app.route('/download_data/<file_format>')
+def download_data(file_format):
+    try:
+        # Read the data from output.json file
+        with open(OUTPUT_FILE_PATH, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        return 'File not found.', 404
+    except json.JSONDecodeError:
+        return 'Error decoding JSON file.', 500
 
-                    # Safely evaluate the 'Extracted Entity' column to convert it to a list
-                    try:
-                        if isinstance(row['Extracted Entity'], str):
-                            row['Extracted Entity'] = ast.literal_eval(row['Extracted Entity'])
-                            print(f"Extracted Entity after eval: {row['Extracted Entity']}")
-                        
-                        if isinstance(row['Entity Type'], str):
-                            row['Entity Type'] = ast.literal_eval(row['Entity Type'])
-                            print(f"Entity Type after eval: {row['Entity Type']}")
-                        
-                        if isinstance(row['Supporting Evidence'], str):
-                            row['Supporting Evidence'] = ast.literal_eval(row['Supporting Evidence'])
-                            print(f"Supporting Evidence after eval: {row['Supporting Evidence']}")
-                    except Exception as e:
-                        print(f"Error parsing row: {row}, Error: {e}")
+    if file_format == 'csv':
+        # Generate CSV data
+        output = StringIO()
+        writer = csv.DictWriter(output, fieldnames=data[0].keys())
+        writer.writeheader()
 
-                    data.append(row)
+        for row in data:
+            # Handle list-to-string conversion (for "Extracted Entity" etc.)
+            row['Extracted Entity'] = ', '.join(row['Extracted Entity'])
+            row['Entity Type'] = ', '.join(row['Entity Type'])
+            row['Supporting Evidence'] = ', '.join(row['Supporting Evidence'])
+            writer.writerow(row)
 
-        except FileNotFoundError:
-            return 'File not found.', 404
-        except Exception as e:
-            return f'Error reading file: {e}', 500
+        output.seek(0)  # Rewind the StringIO object to start from the beginning
 
-        # Return the result page with the data from the file
-        return render_template('result.html', data=data)
+        # Convert StringIO to BytesIO for sending file
+        bytes_io = BytesIO(output.getvalue().encode('utf-8'))
 
-    return 'No file uploaded or invalid file.', 400
+        # Send the generated CSV file to the user for download
+        return send_file(bytes_io, mimetype='text/csv', as_attachment=True, download_name='output.csv')
+
+    elif file_format == 'json':
+        # Generate JSON data
+        output = BytesIO()
+        json_data = json.dumps(data, indent=4)  # Convert to JSON string
+        output.write(json_data.encode('utf-8'))  # Write the JSON string as bytes (Important step)
+        output.seek(0)  # Go to the beginning of the BytesIO buffer
+        return send_file(output, mimetype='application/json', as_attachment=True, download_name='output.json')
+
+    return 'Invalid file format requested', 400
 
 if __name__ == '__main__':
     app.run(debug=True)
