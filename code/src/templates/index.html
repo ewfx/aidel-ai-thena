@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload a File</title>
+    <style>
+        /* Basic Reset for the page */
+        body, h1, p, form {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Set background image for the whole body */
+        body {
+            background-image: url('{{ url_for("static", filename="AI.jpeg") }}'); /* Reference the local image */
+            background-size: cover; /* Make the background cover the whole page */
+            background-position: center; /* Center the background image */
+            background-attachment: fixed; /* Ensure the background stays in place while scrolling */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            color: white; /* Make text white to stand out on background */
+        }
+
+        /* Styling for the main heading */
+        h1.main-heading {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #fcfafa;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(236, 250, 237, 0.8); /* Semi-transparent green background */
+            color: rgb(19, 3, 3);
+            border-radius: 5px;
+            width: 60%;
+        }
+
+        /* Styling for the container */
+        .container {
+            background-color: rgba(18, 17, 17, 0.8); /* Semi-transparent white background */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        /* Styling for the subheading */
+        h2.subheading {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #fbf7f7;
+            font-weight: normal;
+        }
+
+        /* Styling for the file input */
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #f5f0f0;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #6dde71;
+            color: rgb(0, 0, 0);
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #25fb30;
+        }
+
+        /* Styling for alert messages */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .alert-success {
+            background-color: #1afc4f;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Styling for the result table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Heading outside of the container -->
+    <h1 class="main-heading">AI-Driven Entity Intelligence Risk Analysis</h1>
+
+    <div class="container">
+        <!-- Subheading for the file upload -->
+        <h2 class="subheading">Upload a .txt or .csv file to begin analysis</h2>
+        
+        <!-- Form for file upload -->
+        <form action="{{ url_for('index') }}" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" id="file" accept=".txt, .csv" required>
+            <button type="submit">Upload</button>
+        </form>
+
+        <!-- Display flashed messages as alerts -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div>
+                    {% for category, message in messages %}
+                        <div class="alert {% if category == 'success' %}alert-success{% else %}alert-error{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        
+       
+           
+    </div>
+
+</body>
+</html>

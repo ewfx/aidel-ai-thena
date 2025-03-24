@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div style="text-align: center;">
+        <a href="/" class="back-btn">Back to Upload</a>
+    </div>
+
+    <h1 style="text-align: center;">Results from the Output File</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Extracted Entity</th>
+                <th>Entity Type</th>
+                <th>Risk Score</th>
+                <th>Supporting Evidence</th>
+                <th>Confidence Score</th>
+                <th>Reason</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if data %}
+                {% for row in data %}
+                    <tr>
+                        <td>{{ row['Transaction ID'] }}</td>
+                        <td>{{ ', '.join(row['Extracted Entity']) }}</td>
+                        <td>{{ ', '.join(row['Entity Type']) }}</td>
+                        <td>{{ row['Risk Score'] }}</td>
+                        <td>{{ ', '.join(row['Supporting Evidence']) }}</td>
+                        <td>{{ row['Confidence Score'] }}</td>
+                        <td>{{ row['Reason'] }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="7" style="text-align: center;">No data available</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+</body>
+</html>
