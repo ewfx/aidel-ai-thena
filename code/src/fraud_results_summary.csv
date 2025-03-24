@@ -1,0 +1,9 @@
+name,fraud_percentage,fraud_count,negative_articles,fraud_risk_level
+charles scharf,0.0,0,2,Minimal
+state street corporation,0.0,0,3,Minimal
+charles schwab corporation,0.0,0,2,Minimal
+henry wells,0.0,0,4,Minimal
+Wells Fargo,0.0,0,4,Minimal
+wells fargo  company,0.0,0,3,Minimal
+vanguard group,0.0,0,0,Minimal
+fidelity national financial,0.0,0,1,Minimal

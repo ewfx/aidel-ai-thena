@@ -5,10 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Results</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            background-color: #fff;
         }
 
         table, th, td {
@@ -19,62 +43,118 @@
 
         th {
             background-color: #f2f2f2;
+            color: #333;
+            font-weight: bold;
+        }
+
+        td {
+            color: #666;
         }
 
         .back-btn {
+            display: inline-block;
             padding: 10px 20px;
             background-color: #4CAF50;
             color: white;
             text-decoration: none;
             border-radius: 5px;
             margin-bottom: 20px;
+            transition: background-color 0.3s ease;
         }
 
         .back-btn:hover {
             background-color: #45a049;
         }
+
+        .download-form {
+            margin-top: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .download-form h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .download-form form {
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .download-form button {
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-form button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
 
-    <div style="text-align: center;">
-        <a href="/" class="back-btn">Back to Upload</a>
-    </div>
+    <div class="container">
+        <!-- Back to Upload Button -->
+        <div style="text-align: center;">
+            <a href="/" class="back-btn">Back to Upload</a>
+        </div>
 
-    <h1 style="text-align: center;">Results from the Output File</h1>
+        <!-- Form to select download format (CSV or JSON) -->
+        <div class="download-form">
+            <h3>Download the data as:</h3>
+            <form action="{{ url_for('download_data', file_format='csv') }}" method="GET">
+                <button type="submit">Download as CSV</button>
+            </form>
+            <form action="{{ url_for('download_data', file_format='json') }}" method="GET">
+                <button type="submit">Download as JSON</button>
+            </form>
+        </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Transaction ID</th>
-                <th>Extracted Entity</th>
-                <th>Entity Type</th>
-                <th>Risk Score</th>
-                <th>Supporting Evidence</th>
-                <th>Confidence Score</th>
-                <th>Reason</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if data %}
-                {% for row in data %}
-                    <tr>
-                        <td>{{ row['Transaction ID'] }}</td>
-                        <td>{{ ', '.join(row['Extracted Entity']) }}</td>
-                        <td>{{ ', '.join(row['Entity Type']) }}</td>
-                        <td>{{ row['Risk Score'] }}</td>
-                        <td>{{ ', '.join(row['Supporting Evidence']) }}</td>
-                        <td>{{ row['Confidence Score'] }}</td>
-                        <td>{{ row['Reason'] }}</td>
-                    </tr>
-                {% endfor %}
-            {% else %}
+        <!-- Results Header -->
+        <h1>Results from the Output File</h1>
+
+        <!-- Table for displaying results -->
+        <table>
+            <thead>
                 <tr>
-                    <td colspan="7" style="text-align: center;">No data available</td>
+                    <th>Transaction ID</th>
+                    <th>Extracted Entity</th>
+                    <th>Entity Type</th>
+                    <th>Risk Score</th>
+                    <th>Supporting Evidence</th>
+                    <th>Confidence Score</th>
+                    <th>Reason</th>
                 </tr>
-            {% endif %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% if data %}
+                    {% for row in data %}
+                        <tr>
+                            <td>{{ row['Transaction ID'] }}</td>
+                            <td>{{ ', '.join(row['Extracted Entity']) }}</td>
+                            <td>{{ ', '.join(row['Entity Type']) }}</td>
+                            <td>{{ row['Risk Score'] }}</td>
+                            <td>{{ ', '.join(row['Supporting Evidence']) }}</td>
+                            <td>{{ row['Confidence Score'] }}</td>
+                            <td>{{ row['Reason'] }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7" style="text-align: center;">No data available</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+    </div>
 
 </body>
 </html>
