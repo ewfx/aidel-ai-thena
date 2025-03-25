@@ -1,0 +1,30 @@
+[
+    {
+        "Transaction ID": "TXN001",
+        "Extracted Entity": [
+            "Google",
+            "Amazon.com, Inc"
+        ],
+        "Risk Score": 58.72932828201938,
+        "Supporting Evidence": [
+            "International Sanctions Regulations, International Risk Assessment, Reuters",
+            "Amazon's Compliance Program, OFAC Settlement, TASS"
+        ],
+        "Confidence Score": 0.913,
+        "Reason": "Both Google and Amazon have demonstrated strong compliance with international sanctions and regulatory standards. They have suspended services in high-risk regions, such as Russia, and maintain transparency in their operations. Their risk exposure is further minimized due to their proactive legal and cybersecurity measures, ensuring adherence to global financial and ethical norms. Despite strong compliance, both companies face regulatory scrutiny—Google for antitrust issues and Amazon for supply chain risks—along with exposure to shifting geopolitical policies. While highly regulated, Microsoft’s data privacy concerns and Wells Fargo’s history of financial scandals raise questions about internal controls and compliance robustness."
+    },
+    {
+        "Transaction ID": "TXN002",
+        "Extracted Entity": [
+            "Microsoft",
+            "Wells Fargo"
+        ],
+        "Risk Score": 56.11585468184722,
+        "Supporting Evidence": [
+            "Current Sanction Lists, BIS Settlement, Microsoft Blogs, Data Centre Dynamics",
+            "SEC Filings, the company's official website, and various regulatory reports"
+        ],
+        "Confidence Score": 0.913,
+        "Reason": "Microsoft and Wells Fargo both operate under strict financial and cybersecurity regulations. Microsoft has a well-documented history of compliance with international sanctions, while Wells Fargo, as a major financial institution, is heavily regulated by U.S. and global financial authorities. Their established risk management frameworks, regulatory oversight, and commitment to anti-money laundering (AML) and know-your-customer (KYC) practices contribute to their low-risk profile."
+    }
+]
