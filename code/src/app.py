@@ -52,10 +52,12 @@ def index():
             for payerName, receiverName, transactionNotes in zip(payerName, receiverName, transactionNotes):
                 print(f"PayerName: {payerName}, ReceiverName: {receiverName}, Transaction Notes: {transactionNotes}")
                 #extract entities
+                print("Extracting entity information....")
                 entity_extraction(payerName)
                 entity_extraction(receiverName)
 
                 #reptutation risk
+                print("Calculating reputation risk...")
                 reputation_entities = get_entity_details(payerName)
                 fraud_detection(reputation_entities,payerName)
 
