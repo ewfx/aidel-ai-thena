@@ -1,5 +1,5 @@
-name,reputaion_risk_score,rep_risk_reason
-Google,0.8,"['Trump and Musk want to redefine  GDP  as tariffs slow economic growth', 'Peter Thiel Bubble Theory Gains Relevance As Bitcoin Hovers Around $95K :  Extremely Hard To Define  ', 'Google sues network of scammers for thousands of fake Maps listings']"
-"Amazon.com, Inc",0,[]
-Microsoft,0,[]
-Wells Fargo,0,[]
+name,reputation_risk_score,rep_risk_reason
+JP Morgan,0.0,"['[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]', '[]']"
+WireCard,0.8,"['[]', ""['wirecard - Wirecard fugitive Jan Marsalek : from financial fraudster to Russian spymaster ? ', 'wirecard - 5 of the biggest and most notorious fraud cases in history']"", '[]', '[]', '[]', '[]']"
+Microsoft,0.0,"['[]', '[]', '[]', '[]', '[]', '[]', '[]']"
+Wells Fargo,0.2,"['[]', '[]', ""['henry wells - Caddo Sheriff open house for students exploring criminal justice']"", '[]', '[]', '[]', '[]', '[]']"

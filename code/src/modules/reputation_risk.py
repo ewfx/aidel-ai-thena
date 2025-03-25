@@ -48,7 +48,6 @@ import time
 
 # --------------------- SETUP ----------------------
 nltk.download("vader_lexicon")
-rep_risk_reasons = []
 # --------------------- CONFIG ----------------------
 fraud_keywords = {
     "fraud": 1.0,
@@ -117,7 +116,7 @@ def analyze_sentiment(article_text):
     return "negative" if sentiment_score < -0.05 else "neutral/positive"
 
 # --------------------- FUNCTION: PROCESS ARTICLES ----------------------
-def analyze_articles(articles):
+def analyze_articles(articles,name):
     rep_risk_reasons = []
     """Processes articles for fraud indicators and sentiment."""
     fraud_count = 0
@@ -130,7 +129,7 @@ def analyze_articles(articles):
         sentiment = analyze_sentiment(content)
 
         if fraud_score != 0:
-          rep_risk_reasons.append(article["Title"])
+          rep_risk_reasons.append(name + " - " + article["Title"])
 
         if fraud_score >= 1.0:
             fraud_count += 1
@@ -147,57 +146,141 @@ def analyze_articles(articles):
 # --------------------- FUNCTION: CLASSIFY FRAUD RISK ----------------------
 def classify_fraud_risk(fraud_percentage):
     """Classifies fraud risk level based on fraud percentage."""
-    if fraud_percentage > 85:
+    if fraud_percentage > 50:
         return "High"
-    elif 50 <= fraud_percentage <= 85:
+    elif 30 <= fraud_percentage <= 50:
         return "Medium"
-    elif 20 <= fraud_percentage < 50:
+    elif 20 <= fraud_percentage < 30:
         return "Low"
     else:
         return "Minimal"
 
 # --------------------- FUNCTION: SAVE RESULTS TO CSV ----------------------
-def save_to_csv(articles, fraud_percentage, fraud_risk_level, entity_name):
+def save_to_csv(articles, fraud_percentage, fraud_risk_level, entity_name, company_name):
     """Saves analyzed articles and results to CSV."""
-    df = pd.DataFrame(articles)
-    df["fraud_percentage"] = fraud_percentage
-    df["fraud_risk_level"] = fraud_risk_level
-    df["entity_name"] = entity_name
-    df.to_csv(f"news/{entity_name}_news_articles.csv", index=False)
+    article = []
+    article.append({
+            "Name": entity_name,
+            "Title": articles,
+            "Fraud Percentage": fraud_percentage,
+            "Fraud Risk Level": fraud_risk_level
+        })
+    df = pd.DataFrame(article)
+    if os.path.exists(f"news/{company_name}/{entity_name}_news_articles.csv"):
+        # Append without writing header if file exists
+        df.to_csv(f"news/{company_name}/{entity_name}_news_articles.csv", mode="a", header=False, index=False)
+    else:
+        if not os.path.exists(f"news/{company_name}"):
+            os.makedirs(f"news/{company_name}")
+        # Write with header if file does not exist
+        df.to_csv(f"news/{company_name}/{entity_name}_news_articles.csv", mode="w", header=True, index=False)
+    #df.to_csv(f"news/{entity_name}_news_articles.csv", index=False)
 
 # --------------------- FUNCTION: PROCESS NAMES ----------------------
 import time
 
-def process_names(names_list):
+def classify_article(article,name):
+    fraud_count = 0 
+    negative_sentiment_count = 0 
+    fraud_percentage = 0
+    fraud_risk = 0
+    content = article["Title"]  # GDELT only provides title and URL
+    fraud_score = detect_fraud_keywords(content)
+    sentiment = analyze_sentiment(content)
+
+    if fraud_score >= 0.5:
+            fraud_count += 1
+    
+    if sentiment == "negative":
+            negative_sentiment_count += 1
+
+    fraud_percentage = fraud_count * 100
+    fraud_risk = classify_fraud_risk(fraud_percentage)
+
+    return fraud_count, negative_sentiment_count, fraud_percentage, fraud_risk 
+
+def process_names(names_list,company_name):
     """Processes multiple names and checks for fraud-related articles."""
     all_results = []
-
+    rep_risk_reasons = set()
+    entity_fraud_percent = 0
+    entity_fraud_risk = ""
     for name in names_list:
+        rep_risk_reasons = set() 
+        entity_fraud_percent = 0
+        entity_fraud_risk = ""
+        if os.path.exists(f"news/{name}/{name}_news_articles.csv") == False:
+            # Add a delay to prevent hitting the rate limit
+            time.sleep(5)  # Add a delay of 2 seconds before each API call
+            high_risk = 0
+            low_risk = 0
+            medium_risk = 0
 
-        # Add a delay to prevent hitting the rate limit
-        time.sleep(5)  # Add a delay of 2 seconds before each API call
+            articles = get_gdelt_articles(name, num_articles=20)
 
-        articles = get_gdelt_articles(name, num_articles=20)
+            if articles:
+                for article in articles:                
+                    fraud_count, negative_count, fraud_percentage, fraud_risk = classify_article(article,name)
+                    if fraud_risk != "Minimal":
+                        rep_risk_reasons.add(name + " - " + article["Title"])
+                    if fraud_risk == "High":
+                        high_risk = high_risk+1
+                    elif fraud_risk == "Medium":
+                        medium_risk = medium_risk + 1
+                    elif fraud_risk == "Low":
+                        low_risk = low_risk + 1
+                    save_to_csv(article["Title"], fraud_percentage, fraud_risk, name, company_name)
+            else:
+                fraud_percentage, fraud_count, negative_count, fraud_risk = 0, 0, 0, "Minimal"
+                save_to_csv(articles, fraud_percentage, fraud_risk, name,company_name)
+            #risk calculation
+            if high_risk+medium_risk+low_risk != 0:
+                entity_fraud_percent = ((high_risk*7 + medium_risk*2 + low_risk*1)/len(articles))*100
+            entity_fraud_risk = classify_fraud_risk(entity_fraud_percent)
 
-        if articles:
-            fraud_count, negative_count, fraud_percentage, fraud_risk = analyze_articles(articles)
+            if not any(result["name"] == name for result in all_results):
+                all_results.append({
+                "name": name,
+                "fraud_percentage": entity_fraud_percent,
+                "fraud_risk": entity_fraud_risk,
+                "Rep_risk_reason": list(rep_risk_reasons)  # Convert set to list
+                })
+
+
+            
         else:
-            fraud_percentage, fraud_count, negative_count, fraud_risk = 0, 0, 0, "Minimal"
+            rep_risk_reasons = set()
+            #"File already exists"
+            if os.path.exists(f"news/{name}/{name}_news_articles.csv"):
+                with open(f"news/{name}/{name}_news_articles.csv", mode="r", newline="", encoding="utf-8") as f:
+                    reader = csv.DictReader(f)
+                    for row in reader:  
+                        #print(row)                      
+                        name = row["Name"]
+                        title = row["Title"]
+                        fraud_percentage = row["Fraud Percentage"]
+                        fruad_risk_level = row["Fraud Risk Level"]
+                        if fruad_risk_level != "Minimal":
+                            rep_risk_reasons.add(name + " - " + title)
+                        if not any(result["name"] == name for result in all_results):
+                            all_results.append({
+                            "name": name,
+                            "fraud_percentage": entity_fraud_percent,
+                            "fraud_risk": entity_fraud_risk,
+                            "Rep_risk_reason": list(rep_risk_reasons)  # Convert set to list
+                        })
 
-        save_to_csv(articles, fraud_percentage, fraud_risk, name)
+
+
 
         # Append result to list
-        all_results.append({
-            "name": name,
-            "fraud_percentage": fraud_percentage,
-            "fraud_count": fraud_count,
-            "negative_articles": negative_count,
-            "fraud_risk_level": fraud_risk
-        })
+        
 
     # Save summary to CSV
     df_results = pd.DataFrame(all_results)
-    df_results.to_csv("fraud_results_summary.csv", index=False)
+    df_results.to_csv(f"news/{company_name}_fraud_results_summary.csv", index=False)
+
+
 
 # --------------------- MAIN EXECUTION ----------------------
 # if __name__ == "__main__":
@@ -205,6 +288,8 @@ def process_names(names_list):
 #     process_names(reputation_entities)
 
 def fraud_detection(reputation_entities,company_name):
+  company_rep_risk = 0
+  percentage_sum = 0
   cache_data = {}
   if os.path.exists('reputation_risk_summary.csv'):
     with open('reputation_risk_summary.csv', mode="r", newline="", encoding="utf-8") as f:
@@ -214,27 +299,30 @@ def fraud_detection(reputation_entities,company_name):
   if company_name in cache_data:
      print("Using cache data for reputational risk....")
   else:
+    print("Finding new data ....")
     reputation_risk = []  
-    process_names(reputation_entities)
-    reputation_df = pd.read_csv("fraud_results_summary.csv")
+    if os.path.exists(f"news/{company_name}_fraud_results_summary.csv") == False:
+        process_names(reputation_entities,company_name)
+    reputation_df = pd.read_csv(f"news/{company_name}_fraud_results_summary.csv")
     percentage_sum = 0
     for index, row in reputation_df.iterrows():
-        if row['name'] == company_name:
-            company_rep_risk = row['fraud_percentage']
+        if row['name'] == company_name.lower():
+            company_rep_risk = company_rep_risk + row['fraud_percentage']
         else:
             percentage_sum = percentage_sum + row['fraud_percentage']
+    
   
     if percentage_sum == 0 and company_rep_risk == 0:
         reputation_risk_score = 0
     else:
         reputation_risk_score = (percentage_sum*20 + company_rep_risk*80)/(percentage_sum + company_rep_risk)
 
-    print(reputation_risk_score/100)
-    print(rep_risk_reasons)
+    # print(reputation_risk_score/100)
+    # print(rep_risk_reasons)
     reputation_risk.append({
             "name": company_name,
             "reputation_risk_score": reputation_risk_score/100,
-            "rep_risk_reason": rep_risk_reasons
+            "rep_risk_reason": reputation_df["Rep_risk_reason"].to_list()
         })
     df_results = pd.DataFrame(reputation_risk)
 
