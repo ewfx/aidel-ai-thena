@@ -1,7 +1,0 @@
-name,fraud_percentage,fraud_risk,Rep_risk_reason
-markus braasch,0.0,Minimal,[]
-wirecard,70.0,High,"['wirecard - Wirecard fugitive Jan Marsalek : from financial fraudster to Russian spymaster ? ', 'wirecard - 5 of the biggest and most notorious fraud cases in history']"
-visa,0.0,Minimal,[]
-vincenzo onorato,0.0,Minimal,[]
-banco santander,0.0,Minimal,[]
-mastercard,0.0,Minimal,[]
