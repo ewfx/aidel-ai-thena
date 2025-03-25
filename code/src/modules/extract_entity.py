@@ -12,7 +12,7 @@ import pandas as pd
 # --------------------- API CONFIG ----------------------
 HF_API_URL = "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct"
 HF_SUMMARY_URL = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn"
-HF_TOKEN = "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"  # Replace with your Hugging Face API key
+HF_TOKEN = "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"  # Replace with your Hugging Face API key
 SERP_API_KEY = "0e171bb73853d57fa90599a725208b89c8fbfd6af245ba07ee196c4753473ba8"  # Replace with your SerpAPI key
 GOOGLE_CSE_API_KEY = "AIzaSyACPO6pPXknFegMmZUCv7TF61C9nBOi5o4"  # Replace with your Google CSE API key
 GOOGLE_CSE_ID = "7362fd7218df54a28"  # Replace with your Custom Search Engine ID
@@ -22,7 +22,16 @@ headers = {"Authorization": f"Bearer {HF_TOKEN}"}
 # --------------------- CACHING ----------------------
 CACHE_FILE = "entity_info.csv"
 CACHE_HEADERS = ["name", "type", "ceo", "owner", "headquarters", "net_worth", "founder","date_of_establishment","Sanction","Reason"]
+# Define conversation history to set context
+if not os.path.exists(CACHE_FILE):
+    # Create a blank file with column headers
+    df = pd.DataFrame(columns=CACHE_HEADERS)
+    df.to_csv(CACHE_FILE, index=False)
 
+context = """
+You are an expert assistant providing factual information about companies.
+Answer concisely and provide only relevant details.
+"""
 # Read existing cache into a dictionary
 cache_data = {}
 
@@ -49,6 +58,7 @@ def save_to_csv(data):
 # --------------------- FUNCTION: Query HF API ----------------------
 def query_hf_api(prompt, url=HF_API_URL, max_retries=3):
     """Query Hugging Face API with retry logic."""
+    prompt = "You are an expert assistant providing factual information about companies.Answer concisely and provide only relevant details."+prompt
     payload = {"inputs": prompt, "parameters": {"max_new_tokens": 150, "temperature": 0.7}}
 
     for i in range(max_retries):
@@ -136,6 +146,7 @@ def google_cse_search(company_name):
     except Exception:
         return None
     return None
+
 
 # --------------------- FUNCTION: Get Company Info ----------------------
 def get_company_info(company_name, question):

@@ -4,7 +4,7 @@ nlp = spacy.load("en_core_web_sm")
 import csv
 def normalize_name(name):
     """Removes all non-alphabetic characters except spaces and converts the name to lowercase."""
-    return re.sub(r'[^a-zA-Z\s]', '', name.replace("\n", "")).lower()
+    return re.sub(r'[^a-zA-Z\s]', '', name.replace("\n", "").replace(".", "")).lower()
 
 def get_entity_details(company_name):
   entity_info=pd.read_csv("entity_info.csv")
@@ -34,7 +34,7 @@ def get_entity_details(company_name):
   
 
   reputation_entities = unique_persons
-  reputation_entities.add(company_name)
+  reputation_entities.add(normalize_name(company_name))
   return reputation_entities
 
 from enum import unique
@@ -209,7 +209,7 @@ def process_names(names_list,company_name):
         rep_risk_reasons = set() 
         entity_fraud_percent = 0
         entity_fraud_risk = ""
-        if os.path.exists(f"news/{name}/{name}_news_articles.csv") == False:
+        if os.path.exists(f"news/{company_name}/{name}_news_articles.csv") == False:
             # Add a delay to prevent hitting the rate limit
             time.sleep(5)  # Add a delay of 2 seconds before each API call
             high_risk = 0
@@ -219,7 +219,7 @@ def process_names(names_list,company_name):
             articles = get_gdelt_articles(name, num_articles=20)
 
             if articles:
-                for article in articles:                
+                for article in articles:                                   
                     fraud_count, negative_count, fraud_percentage, fraud_risk = classify_article(article,name)
                     if fraud_risk != "Minimal":
                         rep_risk_reasons.add(name + " - " + article["Title"])
@@ -235,7 +235,8 @@ def process_names(names_list,company_name):
                 save_to_csv(articles, fraud_percentage, fraud_risk, name,company_name)
             #risk calculation
             if high_risk+medium_risk+low_risk != 0:
-                entity_fraud_percent = ((high_risk*7 + medium_risk*2 + low_risk*1)/len(articles))*100
+                entity_fraud_percent = ((high_risk*70 + medium_risk*20 + low_risk*10)/(high_risk+medium_risk+low_risk))
+            print(name,entity_fraud_percent,high_risk)
             entity_fraud_risk = classify_fraud_risk(entity_fraud_percent)
 
             if not any(result["name"] == name for result in all_results):
@@ -251,8 +252,8 @@ def process_names(names_list,company_name):
         else:
             rep_risk_reasons = set()
             #"File already exists"
-            if os.path.exists(f"news/{name}/{name}_news_articles.csv"):
-                with open(f"news/{name}/{name}_news_articles.csv", mode="r", newline="", encoding="utf-8") as f:
+            if os.path.exists(f"news/{company_name}/{name}_news_articles.csv"):
+                with open(f"news/{company_name}/{name}_news_articles.csv", mode="r", newline="", encoding="utf-8") as f:
                     reader = csv.DictReader(f)
                     for row in reader:  
                         #print(row)                      
@@ -306,22 +307,23 @@ def fraud_detection(reputation_entities,company_name):
     reputation_df = pd.read_csv(f"news/{company_name}_fraud_results_summary.csv")
     percentage_sum = 0
     for index, row in reputation_df.iterrows():
-        if row['name'] == company_name.lower():
+        if row['name'] == normalize_name(company_name):
             company_rep_risk = company_rep_risk + row['fraud_percentage']
         else:
             percentage_sum = percentage_sum + row['fraud_percentage']
-    
+    print(company_rep_risk)
+    print(percentage_sum)
   
     if percentage_sum == 0 and company_rep_risk == 0:
         reputation_risk_score = 0
     else:
-        reputation_risk_score = (percentage_sum*20 + company_rep_risk*80)/(percentage_sum + company_rep_risk)
+        reputation_risk_score = ((percentage_sum/100)*20 + (company_rep_risk/100)*80)/100
 
     # print(reputation_risk_score/100)
     # print(rep_risk_reasons)
     reputation_risk.append({
             "name": company_name,
-            "reputation_risk_score": reputation_risk_score/100,
+            "reputation_risk_score": reputation_risk_score,
             "rep_risk_reason": reputation_df["Rep_risk_reason"].to_list()
         })
     df_results = pd.DataFrame(reputation_risk)
