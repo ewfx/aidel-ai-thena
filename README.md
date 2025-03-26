@@ -47,7 +47,7 @@ This project focuses on extracting entity information from transactions and assi
  - Check if that entity is listed on OFAC Sanctions list
  - Calculate the number of filings done by the company
  - Calculate risk score from 4 models Ekata's transaction API, Plaids signal, Maxmind algorithm, Flagrights transaction monitoring algorithm
-* We customized the risk formula, 0.3*sec_edgar_risk + 0.2*ofac_risk_score + 0.3*rep_risk_score +
+* We customized the risk formula,
   - cumulative_risk_score = (sec_edgar_score*0.3) + (0.3*max(rep_risk_party1,rep_risk_party2)) + (0.2 if (ofac_party1=="Yes" or ofac_party2=="Yes") else 0) + (0.4*plaid_score + 0.3*maxmind_score + 0.2*ekata_score + 0.1*flagright_score)
 
 ## 🛠️ How We Built It
