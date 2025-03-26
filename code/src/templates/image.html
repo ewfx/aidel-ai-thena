@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Page</title>
+    <style>
+        /* Style for the image page */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .image-container {
+            margin-top: 20px;
+        }
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .back-btn:hover {
+            background-color: #45a049;
+        }
+        img {
+            width: 100%;  /* You can change this based on your desired size */
+            max-width: 800px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Back Button to go back to the previous page -->
+        <div>
+            <a href="/" class="back-btn">Back to Upload</a>
+        </div>
+
+        <h1>Here is Your Image:</h1>
+
+        <div class="image-container">
+            <img src="{{ url_for('static', filename=image_filename) }}" alt="Image">
+        </div>
+
+    </div>
+
+</body>
+</html>
