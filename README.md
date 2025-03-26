@@ -27,9 +27,12 @@ The solution will improve efficiency, reduce manual effort, and enhance the accu
 📹 [Video Demo](#) (if applicable)  
 🖼️ Screenshots:
 ![Home page](https://github.com/user-attachments/assets/4b6f737d-a5eb-4cbe-9c6a-5f27c0baa5ff)
+![Output page](https://github.com/user-attachments/assets/c765d87d-ff33-4cf9-8dd4-376f43d4b249)
+![Knowledge Graph](https://github.com/user-attachments/assets/f3ea2012-a0cc-4c8a-8062-9bcf0de69d09)
+![Visualization of risk scores](https://github.com/user-attachments/assets/c2c09e32-0bbf-42d6-9695-69c3b68645ee)
 
 
-![Screenshot 1](link-to-image)
+
 
 ## 💡 Inspiration
 The inspiration for this project comes from the need to automate entity verification, reduce manual effort, and enhance risk assessment to combat rising financial fraud and meet growing regulatory compliance demands.
