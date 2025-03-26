@@ -3,16 +3,15 @@ from risk_score_algos import *
 import json
 from transformers import LlamaTokenizer, LlamaForCausalLM, pipeline, AutoTokenizer, AutoModelForCausalLM
 import torch
+from sec_edgar import *
 
 def prompToLLAMA(prompt):    
 
     pipe = pipeline("text-generation", model="baffo32/decapoda-research-llama-7B-hf")
 
-
     tokenizer = AutoTokenizer.from_pretrained("baffo32/decapoda-research-llama-7B-hf")
     model = AutoModelForCausalLM.from_pretrained("baffo32/decapoda-research-llama-7B-hf")
     
-
     # Tokenize the prompt
     inputs = tokenizer(prompt, return_tensors="pt")
 
@@ -49,7 +48,8 @@ def getOutputJson():
         ofac_party1 = entity_df['Sanction'][start_row]
         ofac_party2 = entity_df['Sanction'][start_row+1]
 
-        sec_edgar_score = 0.5 #replace with function call
+        sec_edgar_score = 1 - min(compute_sec_edgar_score(payer, dataframes, years),compute_sec_edgar_score(rcvr, dataframes, years))
+        sec_edgar_filings = get_unique_form_types(payer, dataframes, years)
 
         rep_risk_party1 = reputation_df['reputation_risk_score'][start_row]
         rep_risk_party2 = reputation_df['reputation_risk_score'][start_row+1]
