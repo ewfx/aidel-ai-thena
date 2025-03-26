@@ -96,6 +96,28 @@
         .download-form button:hover {
             background-color: #0056b3;
         }
+
+        /* Audio button styles */
+        .load-audio-btn {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .load-audio-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Hidden audio player initially */
+        #audio-player {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -115,7 +137,29 @@
             <form action="{{ url_for('download_data', file_format='json') }}" method="GET">
                 <button type="submit">Download as JSON</button>
             </form>
+            
+            <a href="{{ url_for('transaction') }}" class="load-transaction-btn" style="padding: 10px 20px; background-color: #fff200; color: rgb(34, 32, 32); text-decoration: none; border-radius: 5px; font-size: 16px; transition: background-color 0.3s ease;">
+                Knowledge Graph
+            </a>
+            
+            <a href="javascript:void(0)" class="load-audio-btn" onclick="toggleAudioPlayer()">Play Audio</a>
+     
+        <div id="audio-player">
+            <audio controls>
+                <source src="{{ url_for('static', filename='audio/output.mp3') }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
         </div>
+        
+            <a href="{{ url_for('show_image_page') }}" class="show-image-btn" 
+               style="padding: 10px 20px; background-color: #007bff; color: white; 
+                      text-decoration: none; border-radius: 5px; font-size: 16px; 
+                      cursor: pointer; transition: background-color 0.3s ease;">
+                Show Image
+            </a>
+      
+        </div>
+
 
         <!-- Results Header -->
         <h1>Results from the Output File</h1>
@@ -154,7 +198,20 @@
             </tbody>
         </table>
 
+       
     </div>
+
+    <script>
+        // Function to toggle the visibility of the audio player
+        function toggleAudioPlayer() {
+            var audioPlayer = document.getElementById('audio-player');
+            if (audioPlayer.style.display === 'none') {
+                audioPlayer.style.display = 'block'; // Show the audio player
+            } else {
+                audioPlayer.style.display = 'none'; // Hide the audio player
+            }
+        }
+    </script>
 
 </body>
 </html>
