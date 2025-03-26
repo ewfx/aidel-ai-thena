@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for,send_from_directory
 import os
 import csv 
 import json
@@ -71,7 +71,7 @@ def index():
 
     return render_template('index.html')
 
-file_name = 'output.json'
+file_name = 'output3.json'
 
 # Get the current working directory
 current_directory = os.getcwd()
@@ -134,6 +134,25 @@ def download_data(file_format):
         return send_file(output, mimetype='application/json', as_attachment=True, download_name='output.json')
 
     return 'Invalid file format requested', 400
+
+@app.route('/show_image_page')
+def show_image_page():
+    # Specify the image filename you want to show
+    image_filename = 'score_image.png'  # Change this to your image file name
+    return render_template('image.html', image_filename=image_filename)
+
+@app.route('/transaction')
+def transaction():
+    return render_template('transaction.html')
+@app.route('/play_audio')
+def play_audio():
+    return render_template('result.html')
+
+@app.route('/static/audio/<filename>')
+def download_file(filename):
+    # Ensure the file exists and is served correctly from the 'static/audio' folder.
+    return send_from_directory(os.path.join(app.root_path, 'static', 'audio'), filename)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
