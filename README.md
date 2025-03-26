@@ -81,7 +81,7 @@ We used python, NLP, Html, LLM models to get details and calculated risk score f
 - 🔹 Other: WikiData, GDELT, SecEdgar, OFAC Sanctions list
 
 ## 👥 Team
-- **Ramya R** - [GitHub](#https://github.com/melodyramya) | [LinkedIn](#https://www.linkedin.com/in/ramya-r-3356a9256)
-- **Samiksha D. Tawde** - [GitHub](#https://github.com/SamikshaDTawde-25) | [LinkedIn](#http://www.linkedin.com/in/samiksha-tawde-b33051229)
-- **Vedasree Anusha K. O.** - [GitHub](#https://github.com/vedasree-anusha) | [LinkedIn](#https://www.linkedin.com/in/vedasree-anusha-395245215/)
-- **Soundharya Subramanian** - [GitHub](#https://github.com/soundharya53) | [LinkedIn](#http://www.linkedin.com/in/soundharya-s-b19661253)
+- **Ramya R** - https://github.com/melodyramya | https://www.linkedin.com/in/ramya-r-3356a9256
+- **Samiksha D. Tawde** - https://github.com/SamikshaDTawde-25) | http://www.linkedin.com/in/samiksha-tawde-b33051229)
+- **Vedasree Anusha K. O.** - https://github.com/vedasree-anusha) | https://www.linkedin.com/in/vedasree-anusha-395245215/)
+- **Soundharya Subramanian** - https://github.com/soundharya53) | http://www.linkedin.com/in/soundharya-s-b19661253)
