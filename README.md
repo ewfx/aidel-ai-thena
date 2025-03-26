@@ -26,6 +26,8 @@ The solution will improve efficiency, reduce manual effort, and enhance the accu
 🔗 [Live Demo](#) (if applicable)  
 📹 [Video Demo](#) (if applicable)  
 🖼️ Screenshots:
+![Home page](https://github.com/user-attachments/assets/4b6f737d-a5eb-4cbe-9c6a-5f27c0baa5ff)
+
 
 ![Screenshot 1](link-to-image)
 
