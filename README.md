@@ -1,4 +1,4 @@
-# 🚀 Project Name
+# 🚀 AI-Driven Entity Intelligence Risk Analysis
 
 ## 📌 Table of Contents
 - [Introduction](#introduction)
@@ -38,15 +38,15 @@ Describe the major technical or non-technical challenges your team encountered.
 ## 🏃 How to Run
 1. Clone the repository  
    ```sh
-   git clone https://github.com/your-repo.git
+   git clone https://github.com/ewfx/aidel-ai-thena.git
    ```
 2. Install dependencies  
    ```sh
-   npm install  # or pip install -r requirements.txt (for Python)
+   pip install -r requirements.txt (for Python)
    ```
 3. Run the project  
    ```sh
-   npm start  # or python app.py
+   python app.py
    ```
 
 ## 🏗️ Tech Stack
