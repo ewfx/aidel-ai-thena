@@ -82,6 +82,6 @@ We used python, NLP, Html, LLM models to get details and calculated risk score f
 
 ## 👥 Team
 - **Ramya R** - https://github.com/melodyramya | https://www.linkedin.com/in/ramya-r-3356a9256
-- **Samiksha D. Tawde** - https://github.com/SamikshaDTawde-25) | http://www.linkedin.com/in/samiksha-tawde-b33051229)
-- **Vedasree Anusha K. O.** - https://github.com/vedasree-anusha) | https://www.linkedin.com/in/vedasree-anusha-395245215/)
-- **Soundharya Subramanian** - https://github.com/soundharya53) | http://www.linkedin.com/in/soundharya-s-b19661253)
+- **Samiksha D. Tawde** - https://github.com/SamikshaDTawde-25 | http://www.linkedin.com/in/samiksha-tawde-b33051229
+- **Vedasree Anusha K. O.** - https://github.com/vedasree-anusha | https://www.linkedin.com/in/vedasree-anusha-395245215
+- **Soundharya Subramanian** - https://github.com/soundharya53 | http://www.linkedin.com/in/soundharya-s-b19661253
