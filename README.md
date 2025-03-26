@@ -14,7 +14,13 @@
 ---
 
 ## 🎯 Introduction
-A brief overview of your project and its purpose. Mention which problem statement are your attempting to solve. Keep it concise and engaging.
+Entity verification and risk assessment in financial transactions are critical but highly manual and error-prone. This project aims to develop a Generative AI/ML-powered system to automate the research and evidence-gathering process by:
+*Extracting and enriching entity names from transaction data.
+*Verifying and classifying entities using public data sources (e.g., WikiData, SEC EDGAR, OFAC Sanctions list).
+*Detecting fraudulent or high-risk entities through anomaly detection.
+*Assigning risk scores and providing supporting evidence to assist analysts.
+
+The solution will improve efficiency, reduce manual effort, and enhance the accuracy of risk evaluation.
 
 ## 🎥 Demo
 🔗 [Live Demo](#) (if applicable)  
@@ -50,10 +56,10 @@ Describe the major technical or non-technical challenges your team encountered.
    ```
 
 ## 🏗️ Tech Stack
-- 🔹 Frontend: React / Vue / Angular
-- 🔹 Backend: Node.js / FastAPI / Django
-- 🔹 Database: PostgreSQL / Firebase
-- 🔹 Other: OpenAI API / Twilio / Stripe
+- 🔹 Frontend: Html
+- 🔹 Backend: Python, Flask
+- 🔹 Vadar, Falcon-7b-Instruct, NLP, Knowledge Graph, pyspark, py2neo, sqlalchemi
+- 🔹 Other: WikiData, GDELT, SecEdgar, OFAC Sanctions list
 
 ## 👥 Team
 - **Your Name** - [GitHub](#) | [LinkedIn](#)
