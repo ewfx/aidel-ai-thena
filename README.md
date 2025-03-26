@@ -22,10 +22,11 @@ Entity verification and risk assessment in financial transactions are critical b
 
 The solution will improve efficiency, reduce manual effort, and enhance the accuracy of risk evaluation.
 
-## 🎥 Demo
-🔗 [Live Demo](#) (if applicable)  
+## 🎥 Demo 
 📹 [Video Demo](#) (if applicable)  
 🖼️ Screenshots:
+![Architectural diagram](https://github.com/user-attachments/assets/478c4cad-4a1b-469c-ae8f-bec9c71e8b39)
+
 ![Home page](https://github.com/user-attachments/assets/4b6f737d-a5eb-4cbe-9c6a-5f27c0baa5ff)
 ![Output page](https://github.com/user-attachments/assets/c765d87d-ff33-4cf9-8dd4-376f43d4b249)
 ![Knowledge Graph](https://github.com/user-attachments/assets/f3ea2012-a0cc-4c8a-8062-9bcf0de69d09)
