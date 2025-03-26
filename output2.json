@@ -1,0 +1,38 @@
+[
+    {
+        "Transaction ID": "TX000100",
+        "Extracted Entity": [
+            "TREX CO INC",
+            "DIGIASIA CORP."
+        ],
+        "Entity Type": [
+            "Corporation",
+            "Corporation"
+        ],
+        "Risk Score": 0.7087696468185737,
+        "Supporting Evidence": [
+            "Company Website, SEC Filings & Compliance Reports, Yahoo Finance, Bloomberg, Nasdaq Listings, MarketWatch, S&P Global Ratings",
+            "Company Website, Crunchbase, Bloomberg, Fintech Industry Reports, APAC Regulatory Filings, World Bank Fintech Insights, LinkedIn Company Profile"
+        ],
+        "Confidence Score": 0.913,
+        "Reason": "The transaction between **TREX CO INC** and **DIGIASIA CORP.** poses **moderate risk** due to TREX’s strong financial transparency but DIGIASIA’s lesser-known status, which raises concerns about financial opacity. While no sanctions exist, cross-border fintech transactions require scrutiny, especially for large sums or unusual patterns, to prevent compliance and fraud risks."
+    },
+    {
+        "Transaction ID": "TX000101",
+        "Extracted Entity": [
+            "BioAge Labs, Inc.",
+            "Google"
+        ],
+        "Entity Type": [
+            "Corporation",
+            "Corporation"
+        ],
+        "Risk Score": 0.4611586599188124,
+        "Supporting Evidence": [
+            "Company Website, SEC Filings & Compliance Reports, Crunchbase, Biotech Industry News, Clinical Trials Database, National Institutes of Health (NIH) Reports, Bloomberg",
+            "OFAC & EU Sanctions Lists, SEC Filings & Compliance Reports, Google Transparency Report, Data Centre Dynamics, BIS Settlements, CNBC, Financial Times"
+        ],
+        "Confidence Score": 0.913,
+        "Reason": "The transaction between **BioAge Labs, Inc.** and **Google** is **low risk**, as Google maintains strict compliance, and BioAge Labs is a legitimate biotech firm. While no fraud indicators exist, biotech transactions often involve sensitive data and intellectual property, requiring adherence to regulatory standards to prevent potential compliance or data security risks."
+    }
+]
